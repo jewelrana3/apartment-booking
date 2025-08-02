@@ -19,7 +19,7 @@ const Navbar = async ({ sideMenu }) => {
       </div>
       <div>
         {sideMenu && (
-          <ul className="flex gap-10">
+          <ul className="flex gap-5">
             <li>
               <Link href="#">Recommended Places</Link>
             </li>

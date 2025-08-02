@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 
-export const LogOut = async () => {
+export const LogOut = () => {
   return (
     <button
       onClick={() => signOut({ callbackUrl: "http://localhost:3000/login" })}

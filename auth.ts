@@ -1,3 +1,4 @@
+import * as bcrypt from "bcrypt-ts";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
@@ -29,7 +30,10 @@ export const {
 
         try {
           const user = await userModal.findOne({ email: credentials.email });
-          const isMatch = user?.email === credentials?.email;
+          const isMatch = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
           if (user) {
             if (isMatch) {
               return user;
