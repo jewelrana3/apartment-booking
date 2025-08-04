@@ -1,13 +1,14 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { ObjectId } from "mongodb";
 
 const reviewSchema = new Schema({
   hotelId: {
     required: true,
-    type: Types.ObjectId,
+    type: ObjectId,
   },
   userId: {
     required: true,
-    type: Types.ObjectId,
+    type: ObjectId,
   },
   review: {
     required: true,

@@ -9,7 +9,6 @@ export const POST = async (request) => {
   await dbConnect();
 
   const hashedPassword = await bcrypt.hash(password, 5);
-  console.log(hashedPassword, "chekc");
 
   const newUser = {
     name: `${fname} ${lname}`,
