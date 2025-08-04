@@ -1,8 +1,48 @@
+"use client";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
 type MyComponentProps = {
   fromList: boolean;
 };
 
 const Search = ({ fromList }: MyComponentProps) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const [allowSearch, setAllowSearch] = useState(true);
+
+  const [searchTerms, setSearchTerms] = useState({
+    destination: "",
+    checkin: "",
+    checkout: "",
+  });
+
+  const handleInputs = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    const state = { ...searchTerms, [name]: value };
+
+    if (
+      new Date(state.checkin).getTime() > new Date(state.checkout).getTime()
+    ) {
+      setAllowSearch(false);
+    } else {
+      setAllowSearch(true);
+    }
+  };
+
+  function doSearch(event) {
+    event.preventDefault();
+
+    const params = new URLSearchParams(searchParams);
+    params.set("destination", searchTerms?.destination);
+    if (searchTerms?.checkin && searchTerms?.checkout) {
+      params.set("checkin", searchTerms?.checkin);
+      params.set("checkout", searchTerms?.checkout);
+    }
+  }
   return (
     <>
       <div className="lg:max-h-[250px] mt-6 bg-white rounded-2xl">
@@ -17,12 +57,13 @@ const Search = ({ fromList }: MyComponentProps) => {
                 name="destination"
                 id="destination"
                 className="border border-black rounded-md py-2 px-4"
+                onChange={handleInputs}
               >
-                <option value="Bali">Bali</option>
-                <option value="Bali">Cox's Bazar</option>
-                <option value="Bali">Sylhet</option>
-                <option value="Bali">Saint Martin</option>
-                <option value="Bali">Bali</option>
+                <option value="Puglia">Puglia</option>
+                <option value="Catania">Catania</option>
+                <option value="Palermo">Palermo</option>
+                <option value="Frejus">Frejus</option>
+                <option value="Paris">Paris</option>
               </select>
             </h4>
           </div>
@@ -35,6 +76,7 @@ const Search = ({ fromList }: MyComponentProps) => {
                 name="checkin"
                 id="checkin"
                 className="border border-black rounded-md p-2"
+                onChange={handleInputs}
               />
             </h4>
           </div>
@@ -47,13 +89,18 @@ const Search = ({ fromList }: MyComponentProps) => {
                 name="checkout"
                 id="checkout"
                 className="border border-black rounded-md p-2"
+                onChange={handleInputs}
               />
             </h4>
           </div>
         </div>
       </div>
 
-      <button className=" bg-amber-500 px-8 py-3 rounded-md block mx-auto text-white font-bold -translate-y-1/2 cursor-pointer">
+      <button
+        disabled={!allowSearch}
+        onClick={doSearch}
+        className=" bg-amber-500 px-8 py-3 rounded-md block mx-auto text-white font-bold -translate-y-1/2 cursor-pointer"
+      >
         🔍️ {fromList ? "Modify Search" : "Search"}
       </button>
     </>
