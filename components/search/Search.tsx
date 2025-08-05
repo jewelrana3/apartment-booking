@@ -33,6 +33,8 @@ const Search = ({ fromList }: MyComponentProps) => {
     }
   };
 
+  console.log("l");
+
   function doSearch(event) {
     event.preventDefault();
 
