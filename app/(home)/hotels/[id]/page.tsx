@@ -3,8 +3,12 @@ import Gallery from "@/components/hotel/details/Gallery";
 import Overview from "@/components/hotel/details/Overview";
 import { getHotelById } from "@/database/quries";
 
-const HotelDetailsPage = async ({ params: { id } }) => {
-  const hotelInfo = await getHotelById(id);
+const HotelDetailsPage = async ({
+  params: { id },
+  searchParams: { checkin, checkout },
+}) => {
+  const hotelInfo = await getHotelById(id, checkin, checkout);
+
   return (
     <>
       <Summary hotelInfo={hotelInfo} />

@@ -2,27 +2,30 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-type MyComponentProps = {
-  fromList: boolean;
-};
+// type MyComponentProps = {
+//   fromList: boolean;
+//   destination: string;
+//   checkin: string;
+//   checkout: string;
+// };
 
-const Search = ({ fromList }: MyComponentProps) => {
+const Search = ({ fromList, destination, checkin, checkout }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const [allowSearch, setAllowSearch] = useState(true);
 
-  const [searchTerms, setSearchTerms] = useState({
-    destination: "",
-    checkin: "",
-    checkout: "",
+  const [searchTerm, setSearchTerm] = useState({
+    destination: destination || "Puglia",
+    checkin: checkin,
+    checkout: checkout,
   });
 
   const handleInputs = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    const state = { ...searchTerms, [name]: value };
+    const state = { ...searchTerm, [name]: value };
 
     if (
       new Date(state.checkin).getTime() > new Date(state.checkout).getTime()
@@ -31,18 +34,23 @@ const Search = ({ fromList }: MyComponentProps) => {
     } else {
       setAllowSearch(true);
     }
+
+    setSearchTerm(state);
   };
 
-  console.log("l");
-
   function doSearch(event) {
-    event.preventDefault();
-
     const params = new URLSearchParams(searchParams);
-    params.set("destination", searchTerms?.destination);
-    if (searchTerms?.checkin && searchTerms?.checkout) {
-      params.set("checkin", searchTerms?.checkin);
-      params.set("checkout", searchTerms?.checkout);
+
+    params.set("destination", searchTerm?.destination || "all");
+    if (searchTerm?.checkin && searchTerm?.checkout) {
+      params.set("checkin", searchTerm?.checkin);
+      params.set("checkout", searchTerm?.checkout);
+    }
+
+    if (pathname.includes("hotels")) {
+      replace(`${pathname}?${params.toString()}`);
+    } else {
+      replace(`${pathname}hotels?${params.toString()}`);
     }
   }
   return (
@@ -59,6 +67,7 @@ const Search = ({ fromList }: MyComponentProps) => {
                 name="destination"
                 id="destination"
                 className="border border-black rounded-md py-2 px-4"
+                defaultValue={searchTerm.destination}
                 onChange={handleInputs}
               >
                 <option value="Puglia">Puglia</option>
@@ -78,6 +87,7 @@ const Search = ({ fromList }: MyComponentProps) => {
                 name="checkin"
                 id="checkin"
                 className="border border-black rounded-md p-2"
+                value={searchTerm.checkin}
                 onChange={handleInputs}
               />
             </h4>
@@ -91,6 +101,7 @@ const Search = ({ fromList }: MyComponentProps) => {
                 name="checkout"
                 id="checkout"
                 className="border border-black rounded-md p-2"
+                value={searchTerm.checkout}
                 onChange={handleInputs}
               />
             </h4>

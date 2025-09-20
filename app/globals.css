@@ -66,4 +66,8 @@ body {
   .imageshowCase img {
     @apply h-full min-h-full w-full min-w-full object-cover;
   }
+
+  button:disabled {
+    @apply bg-gray-400 cursor-default;
+  }
 }

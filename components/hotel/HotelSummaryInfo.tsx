@@ -2,7 +2,13 @@ import Link from "next/link";
 import HotelRating from "./HotelRating";
 import HotelReview from "./HotelReview";
 
-const HotelSummaryInfo = ({ fromListPage, info }) => {
+const HotelSummaryInfo = ({ fromListPage, info, checkin, checkout }) => {
+  let params = "";
+
+  if (checkin && checkout) {
+    params = `?checkin=${checkin}&checkout=${checkout}`;
+  }
+
   return (
     <>
       <div className={fromListPage ? "flex-1" : "flex-1 container"}>
