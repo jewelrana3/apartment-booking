@@ -9,10 +9,7 @@ import {
 } from "@/utils/data-utils";
 
 export async function getAllHotels(destination, checkin, checkout) {
-  console.log(destination, checkin, checkout, "destination, checkin, checkout");
   const regex = new RegExp(destination, "i");
-
-  console.log(regex, "regex");
 
   const hotelsByDestination = await hotelModel
     .find({ city: { $regex: regex } })
@@ -27,13 +24,12 @@ export async function getAllHotels(destination, checkin, checkout) {
     .lean();
 
   let allHotels = hotelsByDestination;
-  console.log(allHotels, "server");
 
   if (checkin && checkout) {
     allHotels = await Promise.all(
       allHotels.map(async (hotel) => {
         const found = await findBooking(hotel._id, checkin, checkout);
-        console.log(found);
+
         if (found) {
           hotel["isBooked"] = true;
         } else {
@@ -58,15 +54,15 @@ async function findBooking(hotelId, checkin, checkout) {
       isDateInbetween(checkout, match.checkin, match.checkout)
     );
   });
-  console.log(found);
 
   return found;
 }
 
 export async function getHotelById(hotelId, checkin, checkout) {
   const hotel = await hotelModel.findById(hotelId).lean();
+  console.log(hotel, "hotel data");
 
-  if (checkin && checkout) {
+  if (hotel && !Array.isArray(hotel) && checkin && checkout) {
     const found = await findBooking(hotel._id, checkin, checkout);
     if (found) {
       hotel["isBooked"] = true;

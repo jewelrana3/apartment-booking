@@ -39,6 +39,7 @@ const Search = ({ fromList, destination, checkin, checkout }) => {
   };
 
   function doSearch(event) {
+    event.preventDefault();
     const params = new URLSearchParams(searchParams);
 
     params.set("destination", searchTerm?.destination || "all");
