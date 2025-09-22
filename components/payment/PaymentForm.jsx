@@ -1,4 +1,4 @@
-const PaymentForm = () => {
+const PaymentForm = ({ checkin, checkout }) => {
   return (
     <form className="my-8">
       <div className="my-4 space-y-2">
@@ -30,6 +30,7 @@ const PaymentForm = () => {
             type="date"
             name="checkin"
             id="checkin"
+            defaultValue={checkin}
             className="w-full border border-[#CCCCCC]/60 py-1 px-2 rounded-md"
           />
         </h4>
@@ -42,6 +43,7 @@ const PaymentForm = () => {
             type="date"
             name="checkout"
             id="checkout"
+            defaultValue={checkout}
             className="w-full border border-[#CCCCCC]/60 py-1 px-2 rounded-md"
           />
         </h4>

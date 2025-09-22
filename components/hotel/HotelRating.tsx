@@ -30,8 +30,6 @@ export default async function HotelRating({ id }) {
       }) / ratings.length;
   }
 
-  console.log(avgRating);
-
   return (
     <>
       <div className="bg-orange-400 w-[35px] h-[35px] rounded-sm text-white grid place-items-center font-bold">

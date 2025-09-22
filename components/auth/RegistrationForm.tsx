@@ -22,7 +22,6 @@ const RegistrationForm = () => {
       });
 
       res.status === 201 && router.push("/login");
-      console.log(res, "responsive");
     } catch (err) {
       setError(err.message);
     }

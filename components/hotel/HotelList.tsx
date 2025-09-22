@@ -3,7 +3,6 @@ import HotelCard from "./HotelCard";
 
 const HotelList = async ({ destination, checkin, checkout }) => {
   const allHotels = await getAllHotels(destination, checkin, checkout);
-  console.log(allHotels);
 
   return (
     <div className="col-span-9">
