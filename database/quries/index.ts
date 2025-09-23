@@ -86,5 +86,6 @@ export async function getReviewsForAHotel(hotelId) {
 
 export async function getUserByEmail(email) {
   const users = await userModal.find({ email: email }).lean();
-  return replaceMongoIdInArray(users[0]);
+  // console.log(users, "users");
+  return replaceMongoIdInArray(users);
 }
