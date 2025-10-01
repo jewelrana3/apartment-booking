@@ -1,22 +1,51 @@
-import Summary from "@/components/hotel/details/Summary";
-import Gallery from "@/components/hotel/details/Gallery";
-import Overview from "@/components/hotel/details/Overview";
-import { getHotelById } from "@/database/quries";
+import PaymentForm from "@/components/payment/PaymentForm";
 
-const HotelDetailsPage = async ({
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import { getHotelById, getUserByEmail } from "@/database/quries";
+import { getDayDifference } from "@/utils/data-utils";
+
+const PaymentPage = async ({
   params: { id },
   searchParams: { checkin, checkout },
 }) => {
-  console.log(checkin, checkout, "juyel 3");
+  const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
   const hotelInfo = await getHotelById(id, checkin, checkout);
+  // console.log(hotelInfo, "hotelInfo");
+  const loggedInUser = await getUserByEmail(session?.user?.email);
+  const hotelId = JSON.stringify(hotelInfo);
+  // console.log(hotelId, "hotelId");
+
+  const hasCheckInCheckOut = checkin && checkout;
+  let cost = (hotelInfo?.highRate + hotelInfo?.lowRate) / 2;
+  if (hasCheckInCheckOut) {
+    const days = getDayDifference(checkin, checkout);
+    cost = cost * days;
+  }
 
   return (
-    <>
-      <Summary hotelInfo={hotelInfo} checkin={checkin} checkout={checkout} />
-      <Gallery gallery={hotelInfo?.gallery} />
-      <Overview overview={hotelInfo?.overview} />
-    </>
+    <section className="container">
+      <div className="p-6 rounded-lg max-w-xl mx-auto my-12 mt-[100px]">
+        <h2 className="font-bold text-2xl">Payment Details</h2>
+        <p className="text-gray-600 text-sm">
+          You have picked <b>{hotelInfo?.name}</b> and total price is{" "}
+          <b>${cost}</b>{" "}
+          {hasCheckInCheckOut && `for ${getDayDifference(checkin, checkout)}`}{" "}
+          day(s).
+        </p>
+        <PaymentForm
+          loggedInUser={loggedInUser}
+          hotelInfo={hotelId}
+          checkin={checkin}
+          checkout={checkout}
+        />
+      </div>
+    </section>
   );
 };
 
-export default HotelDetailsPage;
+export default PaymentPage;

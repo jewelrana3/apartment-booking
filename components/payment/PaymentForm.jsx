@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const PaymentForm = ({ loggedInUser, hotelInfo, checkin, checkout }) => {
   const router = useRouter();

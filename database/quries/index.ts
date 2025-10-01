@@ -60,7 +60,26 @@ async function findBooking(hotelId, checkin, checkout) {
 }
 
 export async function getHotelById(hotelId, checkin, checkout) {
+  console.log({ hotelId, checkin, checkout }, "getHotelById");
   const hotel = await hotelModel.findById(hotelId).lean();
+  if (!hotel) {
+    return replaceMongoIdInObject({
+      _id: "lsdkkf",
+      name: "lkdjf",
+      address1: "sdf",
+      airportCode: "lskdf",
+      city: "lskdf",
+      countryCode: "dfd",
+      highRate: 546,
+      lowRate: 564,
+      propertyCategory: 23652,
+      stateProvinceCode: "",
+      thumbNailUrl: "",
+      gallery: "",
+      overview: "",
+      amenities: [],
+    });
+  }
   console.log(hotel, "hotel data");
 
   if (hotel && !Array.isArray(hotel) && checkin && checkout) {
