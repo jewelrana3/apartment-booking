@@ -9,7 +9,7 @@ export default async function Review({ params }) {
   return (
     <div className="mt-28 max-w-7xl mx-auto">
       <h1>Catch-all Degment</h1>
-      {reviews.map((item) => (
+      {reviews?.map((item) => (
         <p key={item.id}>{item.review}</p>
       ))}
     </div>

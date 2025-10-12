@@ -30,6 +30,7 @@ export async function getAllHotels(destination, checkin, checkout) {
     allHotels = await Promise.all(
       allHotels.map(async (hotel) => {
         const found = await findBooking(hotel._id, checkin, checkout);
+        console.log(found, "found");
 
         if (found) {
           hotel["isBooked"] = true;
@@ -45,9 +46,12 @@ export async function getAllHotels(destination, checkin, checkout) {
 }
 
 async function findBooking(hotelId, checkin, checkout) {
-  const matches = await bookingModel
-    .find({ hotelId: hotelId.toString() })
-    .lean();
+  console.log(hotelId, checkin, checkout, "matches 2");
+  const matches = await bookingModel.find().lean();
+
+  // .find({ hotelId: hotelId.toString() })
+
+  console.log(matches, "matches");
 
   const found = matches.find((match) => {
     return (
@@ -55,6 +59,8 @@ async function findBooking(hotelId, checkin, checkout) {
       isDateInbetween(checkout, match.checkin, match.checkout)
     );
   });
+
+  console.log(found, "founded 2");
 
   return found;
 }

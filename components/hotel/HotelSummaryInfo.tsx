@@ -4,7 +4,6 @@ import HotelReview from "./HotelReview";
 
 const HotelSummaryInfo = ({ fromListPage, info, checkin, checkout }) => {
   let params = "";
-
   if (checkin && checkout) {
     params = `?checkin=${checkin}&checkout=${checkout}`;
   }
@@ -37,17 +36,13 @@ const HotelSummaryInfo = ({ fromListPage, info, checkin, checkout }) => {
         </h2>
         <p className=" text-right">Per Night for 4 Rooms</p>
         {fromListPage ? (
-          <Link href={`/hotels/${info.id}${params}`} className="btn-primary">
+          <Link href={`/hotels/${info?.id}${params}`} className="btn-primary ">
             Details
           </Link>
         ) : (
           <Link
-            href={
-              info?.isBooked
-                ? "#"
-                : `/hotels/${info?.id}/payment?checkin=${checkin}&checkout=${checkout}`
-            }
-            className={`${info?.isBooked ? "bg-gray-400" : "btn-primary "}`}
+            href={info?.isBooked ? "#" : `/hotels/${info?.id}/payment${params}`}
+            className={info?.isBooked ? "btn-disabled p-2" : "btn-primary"}
           >
             Book
           </Link>

@@ -16,6 +16,7 @@ export const replaceMongoIdInObject = (obj) => {
 };
 
 export const isDateInbetween = (date, from, to) => {
+  console.log(date, from, to, "date check");
   return (
     new Date(date).getTime() >= new Date(from).getTime() &&
     new Date(date).getTime() <= new Date(to).getTime()
