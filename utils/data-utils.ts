@@ -10,13 +10,11 @@ export const replaceMongoIdInArray = (array) => {
 };
 
 export const replaceMongoIdInObject = (obj) => {
-  console.log(obj, "obj");
   const { _id, ...updatedObj } = { ...obj, id: obj._id.toString() };
   return updatedObj;
 };
 
 export const isDateInbetween = (date, from, to) => {
-  console.log(date, from, to, "date check");
   return (
     new Date(date).getTime() >= new Date(from).getTime() &&
     new Date(date).getTime() <= new Date(to).getTime()

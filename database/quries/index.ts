@@ -30,7 +30,6 @@ export async function getAllHotels(destination, checkin, checkout) {
     allHotels = await Promise.all(
       allHotels.map(async (hotel) => {
         const found = await findBooking(hotel._id, checkin, checkout);
-        console.log(found, "found");
 
         if (found) {
           hotel["isBooked"] = true;
@@ -46,12 +45,9 @@ export async function getAllHotels(destination, checkin, checkout) {
 }
 
 async function findBooking(hotelId, checkin, checkout) {
-  console.log(hotelId, checkin, checkout, "matches 2");
   const matches = await bookingModel.find().lean();
 
   // .find({ hotelId: hotelId.toString() })
-
-  console.log(matches, "matches");
 
   const found = matches.find((match) => {
     return (
@@ -60,13 +56,10 @@ async function findBooking(hotelId, checkin, checkout) {
     );
   });
 
-  console.log(found, "founded 2");
-
   return found;
 }
 
 export async function getHotelById(hotelId, checkin, checkout) {
-  console.log({ hotelId, checkin, checkout }, "getHotelById");
   const hotel = await hotelModel.findById(hotelId).lean();
   if (!hotel) {
     return replaceMongoIdInObject({
@@ -86,7 +79,6 @@ export async function getHotelById(hotelId, checkin, checkout) {
       amenities: [],
     });
   }
-  console.log(hotel, "hotel data");
 
   if (hotel && !Array.isArray(hotel) && checkin && checkout) {
     const found = await findBooking(hotel._id, checkin, checkout);
@@ -111,6 +103,10 @@ export async function getReviewsForAHotel(hotelId) {
 
 export async function getUserByEmail(email) {
   const users = await userModal.find({ email: email }).lean();
-  // console.log(users, "users");
   return replaceMongoIdInArray(users);
+}
+
+export async function getBookingsByUser(userId) {
+  const bookings = await bookingModel.find({ userId: userId }).lean();
+  return replaceMongoIdInArray(bookings);
 }

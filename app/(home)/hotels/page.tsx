@@ -5,7 +5,6 @@ import Search from "@/components/search/Search";
 const HotelListPage = ({
   searchParams: { destination, checkin, checkout },
 }) => {
-  console.log(checkin, checkout, "juyel");
   return (
     <>
       <section className="bg-[url('/hero-bg.jpg')] bg-cover bg-no-repeat bg-center pt-[100px] pb-[60px]">
