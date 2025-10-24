@@ -9,7 +9,7 @@ import {
   replaceMongoIdInObject,
 } from "@/utils/data-utils";
 
-export async function getAllHotels(destination, checkin, checkout) {
+export async function getAllHotels(destination, checkin, checkout, category) {
   const regex = new RegExp(destination, "i");
 
   const hotelsByDestination = await hotelModel
@@ -25,6 +25,13 @@ export async function getAllHotels(destination, checkin, checkout) {
     .lean();
 
   let allHotels = hotelsByDestination;
+
+  if (category) {
+    const categoriesToMatch = category.split("|");
+    allHotels = allHotels.filter((hotel) => {
+      return categoriesToMatch.includes(hotel.propertyCategory.toString());
+    });
+  }
 
   if (checkin && checkout) {
     allHotels = await Promise.all(
@@ -59,26 +66,30 @@ async function findBooking(hotelId, checkin, checkout) {
   return found;
 }
 
-export async function getHotelById(hotelId, checkin, checkout) {
+export async function getHotelById(
+  hotelId?: string,
+  checkin?: string,
+  checkout?: string
+) {
   const hotel = await hotelModel.findById(hotelId).lean();
-  if (!hotel) {
-    return replaceMongoIdInObject({
-      _id: "lsdkkf",
-      name: "lkdjf",
-      address1: "sdf",
-      airportCode: "lskdf",
-      city: "lskdf",
-      countryCode: "dfd",
-      highRate: 546,
-      lowRate: 564,
-      propertyCategory: 23652,
-      stateProvinceCode: "",
-      thumbNailUrl: "",
-      gallery: "",
-      overview: "",
-      amenities: [],
-    });
-  }
+  // if (!hotel) {
+  //   return replaceMongoIdInObject({
+  //     _id: "lsdkkf",
+  //     name: "lkdjf",
+  //     address1: "sdf",
+  //     airportCode: "lskdf",
+  //     city: "lskdf",
+  //     countryCode: "dfd",
+  //     highRate: 546,
+  //     lowRate: 564,
+  //     propertyCategory: 23652,
+  //     stateProvinceCode: "",
+  //     thumbNailUrl: "",
+  //     gallery: "",
+  //     overview: "",
+  //     amenities: [],
+  //   });
+  // }
 
   if (hotel && !Array.isArray(hotel) && checkin && checkout) {
     const found = await findBooking(hotel._id, checkin, checkout);

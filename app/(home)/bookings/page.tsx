@@ -9,9 +9,10 @@ const BookingsPage = async () => {
   const session = await auth();
   if (!session) redirect("/login");
 
-  const loggedInUser = await getUserByEmail(session?.user?.email);
+  const loggedInUser: any[] | null = await getUserByEmail(session?.user?.email);
+  if (!loggedInUser?.length) redirect("/login");
 
-  const bookings = await getBookingsByUser(loggedInUser[0]?.id);
+  const bookings = await getBookingsByUser(loggedInUser[0].id);
 
   const PastBookings = bookings?.filter((booking) => {
     return new Date().getTime() > new Date(booking.checkin).getTime();
