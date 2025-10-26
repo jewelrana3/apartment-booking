@@ -20,14 +20,14 @@ export default async function HotelRating({ id }) {
 
   let avgRating = 0;
 
-  if (ratings.length === 1) {
+  if (ratings?.length === 1) {
     avgRating = ratings[0].rating;
   }
-  if (ratings.length > 1) {
+  if (ratings?.length > 1) {
     avgRating =
-      ratings.reduce((item, currentValue) => {
+      ratings?.reduce((item, currentValue) => {
         return item.rating + currentValue.rating;
-      }) / ratings.length;
+      }) / rating?.length;
   }
 
   return (
